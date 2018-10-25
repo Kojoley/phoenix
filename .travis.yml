@@ -11,11 +11,6 @@ os:
   - linux
   - osx
 
-branches:
-  only:
-    - master
-    - develop
-
 env:
   matrix:
     - BOGUS_JOB=true
@@ -259,6 +254,60 @@ matrix:
             - ubuntu-toolchain-r-test
             - llvm-toolchain-trusty-4.0
 
+    - os: linux
+      env:
+        - COMMENT=asan
+        - TOOLSET=gcc-8
+        - CXXSTD=03,11
+        - CXXFLAGS="cxxflags=-fno-omit-frame-pointer cxxflags=-fsanitize=address cxxflags=-fno-sanitize-recover=address"
+        - LINKFLAGS="linkflags=-fsanitize=address linkflags=-fno-sanitize-recover=address linkflags=-fuse-ld=gold"
+        - UBSAN_OPTIONS=print_stacktrace=1
+      addons: &gcc-8
+        apt:
+          packages:
+            - g++-8
+          sources:
+            - ubuntu-toolchain-r-test
+
+    - os: linux
+      env:
+        - COMMENT=ubsan
+        - B2_VARIANT=variant=debug
+        - TOOLSET=gcc-8
+        - CXXSTD=03,11
+        - CXXFLAGS="cxxflags=-fno-omit-frame-pointer cxxflags=-fsanitize=undefined cxxflags=-fno-sanitize-recover=undefined"
+        - LINKFLAGS="linkflags=-fsanitize=undefined linkflags=-fno-sanitize-recover=undefined linkflags=-fuse-ld=gold"
+        - UBSAN_OPTIONS=print_stacktrace=1
+      addons: *gcc-8
+
+    - os: linux
+      env:
+        - COMMENT=asan
+        - TOOLSET=clang-7
+        - CXXSTD=03,11
+        - CXXFLAGS="cxxflags=-fno-omit-frame-pointer cxxflags=-fsanitize=address cxxflags=-fno-sanitize-recover=address"
+        - LINKFLAGS="linkflags=-fsanitize=address linkflags=-fno-sanitize-recover=address"
+        - UBSAN_OPTIONS=print_stacktrace=1
+      addons: &clang-7
+        apt:
+          packages:
+            - clang-7
+            - libstdc++-8-dev
+          sources:
+            - ubuntu-toolchain-r-test
+            - llvm-toolchain-trusty-7
+
+    - os: linux
+      env:
+        - COMMENT=ubsan
+        - B2_VARIANT=variant=debug
+        - TOOLSET=clang-7
+        - CXXSTD=03,11
+        - CXXFLAGS="cxxflags=-fno-omit-frame-pointer cxxflags=-fsanitize=undefined cxxflags=-fno-sanitize-recover=undefined"
+        - LINKFLAGS="linkflags=-fsanitize=undefined linkflags=-fno-sanitize-recover=undefined"
+        - UBSAN_OPTIONS=print_stacktrace=1
+      addons: *clang-7
+
     - os: osx
       env: TOOLSET=clang COMPILER=clang++ CXXSTD=03,11
     - os: osx
@@ -355,4 +404,4 @@ install:
   - ./b2 headers
 
 script:
-  - ./b2 -j`(nproc || sysctl -n hw.ncpu) 2> /dev/null` libs/phoenix/test toolset=$TOOLSET cxxstd=$CXXSTD
+  - ./b2 -j`(nproc || sysctl -n hw.ncpu) 2> /dev/null` libs/phoenix/test toolset=$TOOLSET cxxstd=$CXXSTD $CXXFLAGS $LINKFLAGS
