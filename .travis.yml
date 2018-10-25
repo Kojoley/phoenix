@@ -255,6 +255,7 @@ matrix:
             - llvm-toolchain-trusty-4.0
 
     - os: linux
+      sudo: required
       env:
         - COMMENT=asan
         - TOOLSET=gcc-8
@@ -281,6 +282,7 @@ matrix:
       addons: *gcc-8
 
     - os: linux
+      sudo: required
       env:
         - COMMENT=asan
         - TOOLSET=clang-7
