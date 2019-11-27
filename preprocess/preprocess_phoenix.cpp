@@ -11,6 +11,5 @@
 #include "../include/boost/phoenix/object.hpp"
 #include "../include/boost/phoenix/operator.hpp"
 #include "../include/boost/phoenix/scope.hpp"
-#include "../include/boost/phoenix/scope/dynamic.hpp"
 #include "../include/boost/phoenix/statement.hpp"
 #include "../include/boost/phoenix/stl.hpp"

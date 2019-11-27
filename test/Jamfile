@@ -29,9 +29,6 @@ project
         $(CI_DEFINES)
     ;
 
-local multi-threading = <library>/boost/thread
-                        <threading>multi <define>BOOST_ALL_NO_LIB=1 ;
-
 test-suite phoenix_core :
     [ run core/custom_terminal.cpp ]
     [ run core/intel_test.cpp ]
@@ -155,11 +152,9 @@ test-suite phoenix_scope :
 #    [ run scope/more_let_tests1.cpp ]
 #    [ run scope/more_let_tests2a.cpp ]
 #    [ run scope/more_let_tests2b.cpp ]
-    [ run scope/dynamic_tests.cpp ]
     [ run scope/bug3289.cpp ]
     [ run scope/bug8298.cpp ]
     [ compile-fail scope/bug8298f.cpp ]
-    [ run scope/bug_000008.cpp : : : $(multi-threading) ]
     ;
 
 test-suite phoenix_algorithm :
@@ -287,7 +282,6 @@ test-suite phoenix_include :
     [ run include/object/const_cast.cpp ]
     [ run include/object/construct.cpp ]
     [ run include/object/delete.cpp ]
-    [ run include/object/dynamic_cast.cpp ]
     [ run include/object/new.cpp ]
     [ run include/object/reinterpret_cast.cpp ]
     [ run include/object/static_cast.cpp ]
@@ -299,7 +293,6 @@ test-suite phoenix_include :
     [ run include/operator/logical.cpp ]
     [ run include/operator/member.cpp : : : : operator_member ]
     [ run include/operator/self.cpp ]
-    [ run include/scope/dynamic.cpp ]
     [ run include/scope/lambda.cpp ]
     [ run include/scope/let.cpp ]
     [ run include/scope/local_variable.cpp ]
