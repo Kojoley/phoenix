@@ -7,6 +7,8 @@ language: cpp
 
 sudo: false
 
+cache: ccache
+
 os:
   - linux
   - osx
@@ -527,6 +529,9 @@ install:
   - ./b2 headers
 
 script:
+  - export CACHE_NAME=$TRAVIS_OS_NAME-$TOOLSET-$CXXSTD
+  - |-
+    echo "using ${TOOLSET%%-*} : ${TOOLSET#*-} : ccache `echo $TOOLSET | sed 's/clang/clang++/;s/gcc/g++/'` ;" > ~/user-config.jam
   - ./b2 libs/phoenix/test toolset=$TOOLSET cxxstd=$CXXSTD
       ${SANITIZED+cxxflags=-fsanitize=address,undefined}
       ${SANITIZED+'linkflags=-fsanitize=address,undefined -fuse-ld=gold'}
