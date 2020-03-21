@@ -13,6 +13,8 @@
 #include <boost/phoenix/statement.hpp>
 #include <boost/phoenix/operator.hpp>
 
+#include <boost/function.hpp>
+
 int
 main()
 {
@@ -61,6 +63,7 @@ main()
 
     cout << endl;
 
+    boost::function<void(int)>
     for_each(v.begin(), v.end(),
         switch_(_1)
         [
@@ -71,6 +74,14 @@ main()
             default_(cout << val("<over 4>") << endl)
         ]
     );
+
+    boost::function<void(int)> f = 
+        switch_(_1)
+        [
+            case_<1>(cout << val("<1>") << endl),
+            default_(cout << val("<over 1>") << endl)
+        ];
+    for_each(v.begin(), v.end(), f);
 
     return boost::report_errors();
 }

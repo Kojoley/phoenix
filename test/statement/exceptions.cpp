@@ -17,6 +17,7 @@
 #include <boost/phoenix/bind/bind_member_function.hpp>
 
 #include <boost/detail/lightweight_test.hpp>
+#include <boost/function.hpp>
 
 struct base_exception : std::exception
 {
@@ -186,6 +187,21 @@ int main()
             [ ref(caught_correct_exception) = false ]
         .catch_all
             [ ref(caught_correct_exception) = true]();
+
+        BOOST_TEST(caught_correct_exception);
+    }
+
+    {
+        bool caught_correct_exception = false;
+
+        boost::function<void()> f = try_
+            [ throw_(runtime_error("error")) ]
+        .catch_<string>()
+            [ ref(caught_correct_exception) = false ]
+        .catch_all
+            [ ref(caught_correct_exception) = true];
+
+        f();
 
         BOOST_TEST(caught_correct_exception);
     }
