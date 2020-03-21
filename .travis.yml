@@ -538,6 +538,7 @@ install:
     echo "using ${TOOLSET%%-*} : ${TOOLSET#*-} : ccache `echo $TOOLSET | sed 's/clang/clang++/;s/gcc/g++/'` ;" > ~/user-config.jam
 
 script:
-  - ./b2 libs/phoenix/test toolset=$TOOLSET cxxstd=$CXXSTD
+  - ASAN_OPTIONS=detect_stack_use_after_return=1
+    ./b2 libs/phoenix/test toolset=$TOOLSET cxxstd=$CXXSTD
       ${SANITIZED+cxxflags=-fsanitize=address,undefined}
       ${SANITIZED+'linkflags=-fsanitize=address,undefined -fuse-ld=gold'}
